@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Search } from "lucide-react"
 import { fetchWeather } from "../utils/api"
-import { countryToName } from "../utils/countryToFlag"
+import { countryToName } from "../utils/countryToName"
 import cities from "../utils/city.list.json"
 
 const SearchBar = ({ onSearch }) => {
@@ -94,7 +94,7 @@ const SearchBar = ({ onSearch }) => {
               onClick={() => handleResultClick(location)}
               className="block w-full text-left p-2 hover:bg-blue-100 dark:hover:bg-blue-700 rounded-md transition-colors"
             >
-              {countryToFlag(location.city ? location.city.country : location.sys.country)}{" "}
+              {countryToName(location.city ? location.city.country : location.sys.country)}{" "}
               {location.city
                 ? `${location.city.name}, ${location.city.country}`
                 : `${location.name}, ${location.sys.country}`}
