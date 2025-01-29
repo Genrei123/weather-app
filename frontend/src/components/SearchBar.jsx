@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { Search } from "lucide-react"
 import { fetchWeather } from "../utils/api"
 import { countryToName } from "../utils/countryToName"
@@ -9,16 +9,19 @@ const SearchBar = ({ onSearch }) => {
   const [selectedCountry, setSelectedCountry] = useState("")
   const [searchResults, setSearchResults] = useState([])
   const [isLoading, setIsLoading] = useState(false)
+  const [hasSearched, setHasSearched] = useState(false)
 
   const countryList = [...new Set(cities.map((city) => city.country))]
 
   const handleInputChange = (e) => {
     setQuery(e.target.value)
+    setHasSearched(false)
   }
 
   const handleCountryChange = (e) => {
     setSelectedCountry(e.target.value)
     setSearchResults([])
+    setHasSearched(false)
   }
 
   const handleSubmit = async (e) => {
@@ -26,6 +29,7 @@ const SearchBar = ({ onSearch }) => {
     if (!query.trim()) return
 
     setIsLoading(true)
+    setHasSearched(true)
     try {
       const searchQuery = selectedCountry ? `${query},${selectedCountry}` : query
 
@@ -33,6 +37,7 @@ const SearchBar = ({ onSearch }) => {
       setSearchResults(Array.isArray(data) ? data : [data])
     } catch (error) {
       console.error("Error fetching weather data:", error)
+      setSearchResults([])
     } finally {
       setIsLoading(false)
     }
@@ -46,7 +51,12 @@ const SearchBar = ({ onSearch }) => {
     onSearch(searchQuery)
     setSearchResults([])
     setQuery("")
+    setHasSearched(false)
   }
+
+  useEffect(() => {
+    setHasSearched(false)
+  }, [])
 
   return (
     <div className="w-full max-w-md mx-auto">
@@ -86,24 +96,29 @@ const SearchBar = ({ onSearch }) => {
         </button>
       </form>
 
-      {searchResults.length > 0 && (
+      {hasSearched && (
         <div className="mt-4 p-2 border rounded-md bg-white dark:bg-gray-800 max-h-60 overflow-y-auto shadow-lg">
-          {searchResults.map((location, index) => (
-            <button
-              key={index}
-              onClick={() => handleResultClick(location)}
-              className="block w-full text-left p-2 hover:bg-blue-100 dark:hover:bg-blue-700 rounded-md transition-colors"
-            >
-              {countryToName(location.city ? location.city.country : location.sys.country)}{" "}
-              {location.city
-                ? `${location.city.name}, ${location.city.country}`
-                : `${location.name}, ${location.sys.country}`}
-            </button>
-          ))}
+          {searchResults.length > 0 ? (
+            searchResults.map((location, index) => (
+              <button
+                key={index}
+                onClick={() => handleResultClick(location)}
+                className="block w-full text-left p-2 hover:bg-blue-100 dark:hover:bg-blue-700 rounded-md transition-colors"
+              >
+                {countryToName(location.city ? location.city.country : location.sys.country)}{" "}
+                {location.city
+                  ? `${location.city.name}, ${location.city.country}`
+                  : `${location.name}, ${location.sys.country}`}
+              </button>
+            ))
+          ) : (
+            <p className="text-center text-gray-500 dark:text-gray-400">No results found</p>
+          )}
         </div>
       )}
     </div>
   )
 }
 
-export default SearchBar;
+export default SearchBar
+
