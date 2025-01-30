@@ -10,7 +10,7 @@ This project is for technical assessment in an internship opportunity. The overa
 - Outputs the 5 day forecast of the queried location.
 
 ## Demo
-SOON!
+https://weather-app-pink-beta-90.vercel.app/
 
 ## How to run this application
 Navigate to backend and frontend package.json and do a regular **npm install** and then start both backend and frontend application.
