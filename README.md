@@ -15,5 +15,15 @@ https://weather-app-pink-beta-90.vercel.app/
 ## How to run this application
 Navigate to backend and frontend package.json and do a regular **npm install** and then start both backend and frontend application.
 
+frontend/ folder.
+1. Create a .env in the frontend/ folder
+2. Have the VITE_BACKEND_URL = http://localhost:5000 or the port of the backend
+3. npm run dev
 
-Refer to .env.local on how to setup the environment variables as the environment variables are hidden for security reasons.
+backend/ folder.
+1. Create a .env in the backend/ folder
+2. Input PORT = 500 and OPENWEATHER_API_KEY = `value`
+( Due to security concerns, I did not upload the API key of OpenWeather )
+3. npm run start
+
+
